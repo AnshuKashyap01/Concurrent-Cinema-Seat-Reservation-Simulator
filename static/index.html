@@ -4,22 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cinema Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
       :root {
-        --bg: #0f0f0f;
-        --surface: #1a1a1a;
-        --surface-hover: #252525;
-        --border: #333;
-        --text: #e0e0e0;
-        --text-muted: #888;
-        --available: #2a2a2a;
-        --available-hover: #3a3a3a;
-        --held-mine: #d4a017;
-        --held-other: #e06c00;
-        --confirmed: #c0392b;
-        --accent: #4fc3f7;
-        --danger: #e74c3c;
-        --font: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+        /* Core Colors */
+        --bg: #0b0c10;
+        --surface: #171923;
+        --surface-hover: #1f222e;
+        --border: rgba(255, 255, 255, 0.08);
+        
+        /* Typography */
+        --text: #f8fafc;
+        --text-muted: #94a3b8;
+        --font: 'Inter', system-ui, -apple-system, sans-serif;
+
+        /* Accents & States */
+        --accent: #8b5cf6;
+        --accent-glow: rgba(139, 92, 246, 0.4);
+        --danger: #ef4444;
+        --success: #10b981;
+
+        /* Seat Colors */
+        --available: #2d3748;
+        --available-hover: #4a5568;
+        --held-mine: #8b5cf6;
+        --held-other: #f59e0b;
+        --confirmed: #475569; /* Made confirmed seats greyed-out for realism */
       }
 
       * {
@@ -31,76 +44,94 @@
       body {
         font-family: var(--font);
         background: var(--bg);
+        background-image: radial-gradient(circle at 50% 0%, #1a1c29 0%, var(--bg) 60%);
         color: var(--text);
         min-height: 100vh;
         padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Container to keep things centered on ultra-wide screens */
+      header, .movies, .content {
+        width: 100%;
+        max-width: 1000px;
       }
 
       header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
         border-bottom: 1px solid var(--border);
       }
 
       header h1 {
-        font-size: 1.4rem;
-        font-weight: 600;
+        font-size: 1.5rem;
+        font-weight: 700;
         letter-spacing: -0.02em;
+        background: linear-gradient(to right, #fff, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
       .user-id {
         font-size: 0.75rem;
+        font-weight: 500;
         color: var(--text-muted);
         background: var(--surface);
-        padding: 0.3rem 0.6rem;
-        border-radius: 4px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
       }
 
       .movies {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
         flex-wrap: wrap;
       }
 
       .movie-card {
+        flex: 1;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1.2rem 1.6rem;
+        border-radius: 12px;
+        padding: 1.5rem;
         cursor: pointer;
-        transition:
-          border-color 0.2s,
-          background 0.2s;
-        min-width: 180px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 200px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       }
 
       .movie-card:hover {
         background: var(--surface-hover);
-        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
       }
 
       .movie-card.selected {
         border-color: var(--accent);
-        background: var(--surface-hover);
+        background: rgba(139, 92, 246, 0.05);
+        box-shadow: 0 0 0 1px var(--accent), 0 10px 15px -3px rgba(0, 0, 0, 0.2);
       }
 
       .movie-card h3 {
-        font-size: 1rem;
-        margin-bottom: 0.4rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
       }
 
       .movie-card p {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
       }
 
       .content {
         display: flex;
-        gap: 2rem;
+        gap: 3rem;
         align-items: flex-start;
         flex-wrap: wrap;
       }
@@ -108,128 +139,169 @@
       .screen-area {
         flex: 1;
         min-width: 300px;
+        background: var(--surface);
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
 
       .screen-label {
         text-align: center;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.2em;
         color: var(--text-muted);
-        margin-bottom: 0.6rem;
+        margin-bottom: 1rem;
       }
 
       .screen-bar {
-        height: 3px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--accent),
-          transparent
-        );
-        border-radius: 2px;
-        margin: 0 2rem 1.5rem;
+        height: 40px;
+        background: linear-gradient(to bottom, rgba(139, 92, 246, 0.15), transparent);
+        border-top: 3px solid var(--accent);
+        border-radius: 50% / 100% 100% 0 0;
+        margin: 0 1rem 3rem;
+        box-shadow: 0 -15px 30px -10px var(--accent-glow);
       }
 
       .seat-grid {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
       }
 
       .seat-row {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.75rem;
         align-items: center;
       }
 
       .row-label {
         width: 1.5rem;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 600;
         color: var(--text-muted);
         text-align: center;
       }
 
       .seat {
-        width: 36px;
-        height: 32px;
-        border-radius: 6px 6px 3px 3px;
+        width: 38px;
+        height: 38px;
+        border-radius: 8px 8px 4px 4px; /* Shaped like a chair */
         border: none;
         cursor: pointer;
-        font-size: 0.65rem;
+        font-size: 0.75rem;
+        font-weight: 600;
         font-family: var(--font);
-        color: var(--text-muted);
+        color: #fff;
         background: var(--available);
-        transition:
-          background 0.2s,
-          transform 0.15s;
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.3); /* 3D depth */
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      .seat:hover:not(.seat--held-mine):not(.seat--held-other):not(
-          .seat--confirmed
-        ) {
+      .seat:hover:not(.seat--held-mine):not(.seat--held-other):not(.seat--confirmed) {
         background: var(--available-hover);
-        transform: scale(1.08);
+        transform: scale(1.1) translateY(-2px);
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
       }
 
       .seat--held-mine {
         background: var(--held-mine);
-        color: #000;
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2), 0 0 12px var(--accent-glow);
         cursor: default;
+        animation: pulse 2s infinite;
       }
 
       .seat--held-other {
         background: var(--held-other);
-        color: #fff;
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.9);
         cursor: not-allowed;
+        opacity: 0.8;
       }
 
       .seat--confirmed {
         background: var(--confirmed);
-        color: #fff;
+        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.3);
         cursor: not-allowed;
+      }
+
+      @keyframes pulse {
+        0% { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 var(--accent-glow); }
+        70% { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2), 0 0 0 10px rgba(139, 92, 246, 0); }
+        100% { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(139, 92, 246, 0); }
       }
 
       .legend {
         display: flex;
-        gap: 1.2rem;
+        gap: 1.5rem;
         justify-content: center;
-        margin-top: 1.5rem;
+        margin-top: 2.5rem;
         flex-wrap: wrap;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
       }
 
       .legend-item {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        font-size: 0.7rem;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 500;
         color: var(--text-muted);
       }
 
       .legend-swatch {
-        width: 14px;
-        height: 12px;
-        border-radius: 3px 3px 2px 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 4px 4px 2px 2px;
+        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
       }
 
       .checkout {
-        width: 280px;
+        width: 320px;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1.4rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        position: sticky;
+        top: 2rem;
       }
 
       .checkout h3 {
-        font-size: 0.85rem;
-        margin-bottom: 1rem;
-        color: var(--accent);
+        font-size: 1.1rem;
+        margin-bottom: 1.2rem;
+        font-weight: 600;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .checkout h3::before {
+        content: '';
+        display: block;
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        box-shadow: 0 0 8px var(--accent);
       }
 
       .checkout-info {
-        font-size: 0.8rem;
-        margin-bottom: 0.6rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border);
       }
 
       .checkout-info span {
@@ -237,68 +309,92 @@
       }
 
       .timer {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         font-weight: 700;
         text-align: center;
-        margin: 1rem 0;
-        color: var(--held-mine);
+        margin: 1.5rem 0;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        text-shadow: 0 0 20px rgba(255,255,255,0.1);
         transition: color 0.3s;
       }
 
       .timer.urgent {
         color: var(--danger);
+        text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        50% { opacity: 0.7; }
       }
 
       .checkout-buttons {
         display: flex;
-        gap: 0.6rem;
+        gap: 0.75rem;
       }
 
       .btn {
         flex: 1;
-        padding: 0.6rem;
+        padding: 0.75rem;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-family: var(--font);
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: all 0.2s;
       }
 
       .btn:hover {
-        opacity: 0.85;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+      
+      .btn:active {
+        transform: translateY(1px);
       }
 
       .btn--confirm {
-        background: #27ae60;
+        background: var(--success);
         color: #fff;
+      }
+      
+      .btn--confirm:hover {
+        background: #14cd90;
       }
 
       .btn--release {
-        background: var(--danger);
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+      }
+      
+      .btn--release:hover {
+        background: rgba(255,255,255,0.05);
         color: #fff;
       }
 
       .status-msg {
         text-align: center;
         margin-top: 1rem;
-        font-size: 0.8rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 500;
+        padding: 0.75rem;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
       }
 
       .status-msg.success {
-        color: #27ae60;
+        color: var(--success);
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
       }
+      
       .status-msg.error {
         color: var(--danger);
-      }
-
-      .empty-state {
-        text-align: center;
-        color: var(--text-muted);
-        font-size: 0.85rem;
-        padding: 3rem 1rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
       }
     </style>
   </head>
@@ -558,15 +654,15 @@
           area.innerHTML =
             '<div class="checkout">' +
             "<h3>Checkout</h3>" +
-            '<div class="checkout-info"><span>Seat:</span> ' +
-            escapeHtml(activeSession.seatID) +
+            '<div class="checkout-info"><span>Seat</span> ' +
+            '<strong>' + escapeHtml(activeSession.seatID) + '</strong>' +
             "</div>" +
-            '<div class="checkout-info"><span>Movie:</span> ' +
-            escapeHtml(activeSession.movieID) +
+            '<div class="checkout-info"><span>Movie</span> ' +
+            '<strong>' + escapeHtml(activeSession.movieID) + '</strong>' +
             "</div>" +
-            '<div class="checkout-info"><span>Session:</span> ' +
-            activeSession.sessionID.slice(0, 8) +
-            "&hellip;</div>" +
+            '<div class="checkout-info" style="border:none; padding:0;"><span>Session ID</span> ' +
+            '<strong>' + activeSession.sessionID.slice(0, 8) + "&hellip;</strong>" +
+            "</div>" +
             '<div class="timer" id="timer">--:--</div>' +
             '<div class="checkout-buttons">' +
             '<button class="btn btn--confirm" id="btnConfirm">Confirm</button>' +

@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sikozonpc/cinema/internal/adapters/redis"
-	"github.com/sikozonpc/cinema/internal/booking"
-	"github.com/sikozonpc/cinema/internal/utils"
+	"github.com/AnshuKashyap01/Concurrent-Cinema-Seat-Reservation-Simulator/internal/adapters/redis"
+	"github.com/AnshuKashyap01/Concurrent-Cinema-Seat-Reservation-Simulator/internal/booking"
+	"github.com/AnshuKashyap01/Concurrent-Cinema-Seat-Reservation-Simulator/internal/utils"
 )
 
 func main() {

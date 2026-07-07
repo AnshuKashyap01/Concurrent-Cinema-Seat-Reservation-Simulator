@@ -313,7 +313,7 @@ User100000─────────────┘
 
 GitHub: https://github.com/AnshuKashyap01
 
-LinkedIn: *Add your LinkedIn profile*
+LinkedIn: https://linkedin.com/in/anshu-kashyap01
 
 ---
 

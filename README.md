@@ -1,4 +1,4 @@
-# Concurrent Cinema Seat Reservation System
+# Concurrent Cinema Seat Reservation Simulator
 
 <p align="left">
 
@@ -10,7 +10,7 @@
 
 </p>
 
-A concurrent cinema seat reservation system built with Go that demonstrates thread-safe seat reservation, race condition prevention, and high-concurrency request handling using Redis.
+A backend project built with Go that demonstrates atomic seat reservation, race condition prevention, and high-concurrency request handling using Redis. The project simulates how real-world ticket booking platforms safely process simultaneous reservation requests for the same seat.
 
 ---
 
@@ -33,7 +33,6 @@ The booking service is validated using a concurrency stress test where **100,000
 
 Only one booking succeeds while all remaining requests are rejected, demonstrating thread-safe reservation logic.
 
-> **Replace the link below with your uploaded GitHub video.**
 
 
 https://github.com/user-attachments/assets/ab78f2cb-3f4d-4a75-b925-04e80958a5b9
